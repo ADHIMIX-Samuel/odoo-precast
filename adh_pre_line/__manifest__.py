@@ -13,6 +13,7 @@
 	"description": "Module yang digunakan untuk manajemen Line Produksi di Divisi Precast",
 	"data": [
 		"menu.xml",
+		"data/ir_sequence.xml",
 		"view/adhimix_pre_line.xml",
 	],
 	"installable": True,

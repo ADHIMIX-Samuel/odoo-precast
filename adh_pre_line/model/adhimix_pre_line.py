@@ -13,6 +13,7 @@ class adhimix_pre_line(models.Model):
 	@api.model
 	def create(self, vals):
 		vals['name'] = self.env['ir.sequence'].next_by_code('adhimix.pre.line')
+		
 		return super(adhimix_pre_line, self).create(vals)
 
 
