@@ -1,0 +1,68 @@
+<odoo>
+	<data>
+
+		<record id="view_adhimix_pre_line_form" model="ir.ui.view">
+			<field name="name">adhimix.pre.line.form</field>
+			<field name="model">adhimix.pre.line</field>
+			<field name="type">form</field>
+			<field name="priority" eval="8"/>
+			<field name="arch" type="xml">
+				<form string="Line Produksi">
+					<sheet>
+						<group>
+							<group>
+								<field name="name"/>
+								<field name="satuan_barang"/>
+							</group>
+							<group>
+								<field name="kapasitas_line"/>
+								<field name="dibuat_oleh"/>
+							</group>
+						</group>
+						<group>
+							<notebook>
+								<page string="Produksi Berjalan">
+									<group>
+										<field name="produksi_berjalan" nolabel="1">
+											<tree string="Line Produksi" editable="top">
+												<field name="nomor_mo"/>
+												<field name="qty_produksi"/>
+												<field name="tanggal_produksi"/>
+												<field name="status_produksi"/>
+											</tree>
+										</field>
+									</group>
+								</page>
+							</notebook>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="view_adhimix_pre_line_tree" model="ir.ui.view">
+			<field name="name">adhimix.pre.line.tree</field>
+			<field name="model">adhimix.pre.line</field>
+			<field name="type">tree</field>
+			<field name="priority" eval="8"/>
+			<field name="arch" type="xml">
+				<tree string="Line Produksi">
+					<field name="name"/>
+					<field name="satuan_barang"/>
+					<field name="kapasitas_line"/>
+					<field name="dibuat_oleh"/>
+				</tree>
+			</field>
+		</record>
+
+		<!-- Sequence -->
+		<record id="seq_adhimix_pre_line" model="ir.sequence">  
+          <field name="name">Adhimix Precast Line</field>  
+          <field name="code">adhimix.pre.line</field>  
+          <field name="prefix">LINE-</field>  
+          <field name="padding">4</field>  
+          <field eval="1" name="number_increment"/>  
+        </record>
+
+	</data>
+</odoo>
