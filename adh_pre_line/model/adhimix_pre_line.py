@@ -25,3 +25,26 @@ class adhimix_pre_line_active(models.Model):
 	qty_produksi = fields.Float(string="Qty Produksi", required=True)
 	tanggal_produksi = fields.Date(string="Tanggal Produksi")
 	status_produksi = fields.Char(string="Status Produksi")
+
+
+class mrp_production(models.Model):
+	_inherit = 'mrp.production'
+
+	line_produksi = fields.Many2one(comodel_name="adhimix.pre.line", required=True, string="Line Produksi")
+
+	@api.model
+	def create(self, values):
+		if not values.get('name', False) or values['name'] == _('New'):
+			values['name'] = self.env['ir.sequence'].next_by_code('mrp.production') or _('New')
+		if not values.get('procurement_group_id'):
+			values['procurement_group_id'] = self.env["procurement.group"].create({'name': values['name']}).id
+		production = super(mrp_production, self).create(values)
+		production._generate_moves()
+		self.env["adhimix.pre.line.active"].create({
+													'reference': production.line_produksi.id,
+													'nomor_mo' : production.id,
+													'qty_produksi' : production.product_qty,
+													'tanggal_produksi' : production.date_planned_start,
+													'status_produksi' : production.state
+													}).id
+		return production
