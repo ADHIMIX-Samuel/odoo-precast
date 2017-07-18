@@ -16,6 +16,8 @@
 							</group>
 							<group>
 								<field name="kapasitas_line"/>
+								<field name="kapasitas_terisi"/>
+								<field name="kapasitas_sisa"/>
 								<field name="dibuat_oleh"/>
 							</group>
 						</group>
