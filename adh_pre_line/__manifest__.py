@@ -14,7 +14,7 @@
 	"data": [
 		"menu.xml",
 		"data/ir_sequence.xml",
-		"view/adhimix_pre_line.xml",
+		"view/line_view.xml",
 	],
 	"installable": True,
 	"auto_install": False,
