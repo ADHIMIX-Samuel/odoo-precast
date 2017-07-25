@@ -93,22 +93,8 @@ class mrp_production(models.Model):
 
 	@api.multi
 	def button_mark_done(self):
-		self.ensure_one()
-		for wo in self.workorder_ids:
-			if wo.time_ids.filtered(lambda x: (not x.date_end) and (x.loss_type in ('productive', 'performance'))):
-				raise UserError(_('Work order %s is still running') % wo.name)
-		self.post_inventory()
-		moves_to_cancel = (self.move_raw_ids | self.move_finished_ids).filtered(lambda x: x.state not in ('done', 'cancel'))
-		moves_to_cancel.action_cancel()
-		self.write({'state': 'done', 'date_finished': fields.Datetime.now()})
-		self.env["procurement.order"].search([('production_id', 'in', self.ids)]).check()
-		self.write({'state': 'done'})
-
-		# if ['state'] == ['done'].browse(values['line_produksi']).produksi_selesai:
+		super(mrp_production, self).button_mark_done()
 		for production in self:
-
-			# if production.state == 'done':
-				# production = super(mrp_production, self).button_mark_done()
 			self.env["adhimix.pre.line.done"].create({
 													'reference': production.line_produksi.id,
 													'nomor_mo' : production.id,
@@ -117,5 +103,6 @@ class mrp_production(models.Model):
 													'status_produksi' : production.state
 													}).id
 
-			self.env['adhimix.pre.line.active'].search([('nomor_mo','=','production.id'),
-														('reference','=','production.line_produksi.id')]).unlink()
+			active_mo = self.env['adhimix.pre.line.active'].search([('nomor_mo','=',production.id), ('reference','=',production.line_produksi.id)])
+			if active_mo:
+				active_mo.unlink()
