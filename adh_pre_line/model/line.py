@@ -50,11 +50,27 @@ class adhimix_pre_line_active(models.Model):
 			rec.status_produksi = rec.nomor_mo.state
 
 
+class adhimix_pre_line_done(models.Model):
+	_name = 'adhimix.pre.line.done'
+
+	reference = fields.Many2one(comodel_name="adhimix.pre.line", required=True, string="Line ID")
+	nomor_mo = fields.Many2one(comodel_name="mrp.production", required=True, string="Nomor MO")
+	qty_produksi = fields.Float(string="Qty Produksi", required=True)
+	tanggal_produksi = fields.Date(string="Tanggal Produksi")
+	status_produksi = fields.Char(string="Status Produksi", compute="_get_status_produksi")
+
+	@api.depends('status_produksi')
+	def _get_status_produksi(self):
+		for rec in self:
+			rec.status_produksi = rec.nomor_mo.state
+
+
 class mrp_production(models.Model):
 	_inherit = 'mrp.production'
 
 	line_produksi = fields.Many2one(comodel_name="adhimix.pre.line", required=True, string="Line Produksi")
 
+	# Inherit Function
 	@api.model
 	def create(self, values):
 		if values['product_qty'] < self.env['adhimix.pre.line'].browse(values['line_produksi']).kapasitas_sisa:
@@ -68,7 +84,6 @@ class mrp_production(models.Model):
 															'tanggal_produksi' : production.date_planned_start,
 															'status_produksi' : production.state
 															}).id
-				
 			else :
 				raise UserError(_('Satuan Uom harus sama dengan satuan line'))					
 		else :
@@ -88,38 +103,19 @@ class mrp_production(models.Model):
 		self.write({'state': 'done', 'date_finished': fields.Datetime.now()})
 		self.env["procurement.order"].search([('production_id', 'in', self.ids)]).check()
 		self.write({'state': 'done'})
-		if (production.state == 'done' for production in self):
-			production = super(mrp_production, self).button_mark_done()
+
+		# if ['state'] == ['done'].browse(values['line_produksi']).produksi_selesai:
+		for production in self:
+
+			# if production.state == 'done':
+				# production = super(mrp_production, self).button_mark_done()
 			self.env["adhimix.pre.line.done"].create({
-														'reference': production.line_produksi.id,
-														'nomor_mo' : production.id,
-														'qty_produksi' : production.product_qty,
-														'tanggal_produksi' : production.date_planned_start,
-														'status_produksi' : production.state
-														}).id
-		else:
-			self.env["adhimix.pre.line.active"].create({
 													'reference': production.line_produksi.id,
 													'nomor_mo' : production.id,
 													'qty_produksi' : production.product_qty,
 													'tanggal_produksi' : production.date_planned_start,
 													'status_produksi' : production.state
 													}).id
-		return production
-		
-			
 
-
-class adhimix_pre_line_done(models.Model):
-	_name = 'adhimix.pre.line.done'
-
-	reference = fields.Many2one(comodel_name="adhimix.pre.line", required=True, string="Line ID")
-	nomor_mo = fields.Many2one(comodel_name="mrp.production", required=True, string="Nomor MO")
-	qty_produksi = fields.Float(string="Qty Produksi", required=True)
-	tanggal_produksi = fields.Date(string="Tanggal Produksi")
-	status_produksi = fields.Char(string="Status Produksi", compute="_get_status_produksi")
-
-	@api.depends('status_produksi')
-	def _get_status_produksi(self):
-		for rec in self:
-			rec.status_produksi = rec.nomor_mo.state
+			self.env['adhimix.pre.line.active'].search([('nomor_mo','=','production.id'),
+														('reference','=','production.line_produksi.id')]).unlink()
