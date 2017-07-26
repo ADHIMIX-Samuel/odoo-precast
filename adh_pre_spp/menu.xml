@@ -1,0 +1,26 @@
+<odoo>
+	<data>
+
+		<record id="action_surat_perintah_produksi" model="ir.actions.act_window">
+			<field name="name">Surat Perintah Produksi</field>
+			<field name="res_model">adhimix.pre.spp</field>
+			<field name="view_mode">tree,form</field>
+			<field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add a Data
+              </p>				
+			</field>
+		</record>
+
+		<!-- <menuitem id="academic_0" name="Academic" sequence="10"/>
+		
+		<menuitem id="academic_1" name="Academic" sequence="10" parent="academic_0"/> -->
+
+		<menuitem id="menu_surat_perintah_produksi"
+		 action="action_surat_perintah_produksi"
+		 name="Surat Perintah Produksi"
+		 sequence="0"
+		 parent="mrp.menu_mrp_manufacturing"/>
+
+	</data>
+</odoo>

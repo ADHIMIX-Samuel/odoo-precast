@@ -1,0 +1,118 @@
+<odoo>
+	<data>
+
+		<record id="view_adhimix_pre_spp" model="ir.ui.view">
+			<field name="name">adhimix.pre.spp.form</field>
+			<field name="model">adhimix.pre.spp</field>
+			<field name="type">form</field>
+			<field name="priority" eval="8"/>
+			<field name="arch" type="xml">
+				<form>
+					<sheet>
+						<group>
+							<field name="name"/>
+							<field name="tanggal" class="oe_inline"/>
+						</group>
+						<group>
+							<notebook>
+								<page string="List Barang">
+									<group>
+										<field name="product_list" nolabel="1">
+											<tree editable="top">
+												<field name="product_id"/>
+												<field name="satuan_barang"/>
+												<field name="qty"/>
+											</tree>
+										</field>
+									</group>
+								</page>
+								<page string="Rencana Produksi">
+									<group>
+										<field name="rencana_produksi" nolabel="1">
+											<tree editable="top">
+												<field name="product_id"/>
+												<field name="line_produksi"/>
+												<field name="qty"/>
+												<field name="tanggal_mulai"/>
+												<field name="tanggal_selesai"/>
+												<field name="nomor_mo"/>
+												<field name="qty_done"/>
+												<field name="qty_cancel"/>
+												<field name="qty_remaining"/>
+												<field name="qty_pindah"/>
+												<field name="qty_pindahan"/>
+											</tree>
+										</field>
+									</group>
+								</page>
+								<page string="Rencana Pengiriman" nolabel="1">
+									<group>
+										<field name="rencana_pengiriman" nolabel="1">
+											<tree editable="top">
+												<field name="product_id"/>
+												<field name="qty"/>
+												<field name="nomor_do"/>
+												<field name="jadwal_kirim"/>
+												<field name="tanggal_kirim"/>
+												<field name="qty_done"/>
+												<field name="qty_cancel"/>
+												<field name="qty_repair"/>
+												<field name="qty_reject"/>
+											</tree>
+										</field>
+									</group>
+								</page>
+								<page string="Rencana Stressing" nolabel="1">
+									<group>
+										<field name="rencana_stressing" nolabel="1">
+											<tree editable="top">
+												<field name="product_id"/>
+												<field name="qty"/>
+												<field name="jadwal_stressing"/>
+												<field name="tanggal_stressing"/>
+												<field name="qty_done"/>
+												<field name="qty_cancel"/>
+												<field name="qty_repair"/>
+												<field name="qty_reject"/>
+											</tree>
+										</field>
+									</group>
+								</page>
+								<page string="Rencana Install" nolabel="1">
+									<group>
+										<field name="rencana_install" nolabel="1">
+											<tree editable="top">
+												<field name="product_id"/>
+												<field name="qty"/>
+												<field name="jadwal_install"/>
+												<field name="tanggal_install"/>
+												<field name="qty_done"/>
+												<field name="qty_cancel"/>
+												<field name="qty_repair"/>
+												<field name="qty_reject"/>
+											</tree>
+										</field>
+									</group>
+								</page>
+							</notebook>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="view_adhimix_pre_spp_tree" model="ir.ui.view">
+			<field name="name">adhimix.pre.spp.tree</field>
+			<field name="model">adhimix.pre.spp</field>
+			<field name="type">tree</field>
+			<field name="priority" eval="8"/>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="name"/>
+					<field name="tanggal"/>
+				</tree>
+			</field>
+		</record>
+
+	</data>
+</odoo>

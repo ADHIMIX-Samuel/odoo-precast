@@ -1,0 +1,11 @@
+<odoo>
+	<data>
+		<record id="seq_adhimix_pre_spp" model="ir.sequence">  
+			<field name="name">Adhimix Surat Perintah Produksi</field>  
+			<field name="code">adhimix.pre.spp</field>  
+			<field name="prefix">SPP-</field>  
+			<field name="padding">4</field>  
+			<field eval="1" name="number_increment"/>  
+		</record>    
+	</data>
+</odoo>
