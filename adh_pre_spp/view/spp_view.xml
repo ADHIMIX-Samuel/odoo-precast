@@ -8,6 +8,9 @@
 			<field name="priority" eval="8"/>
 			<field name="arch" type="xml">
 				<form>
+					<header>
+						<button name="action_simulasi" string="Simulasi" type="object" class="oe_highlight"/>
+					</header>
 					<sheet>
 						<group>
 							<field name="name"/>

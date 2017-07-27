@@ -17,8 +17,24 @@ class adhimix_pre_spp(models.Model):
 	@api.model
 	def create(self, vals):
 		vals['name'] = self.env['ir.sequence'].next_by_code('adhimix.pre.spp')
-		
 		return super(adhimix_pre_spp, self).create(vals)
+
+	@api.multi
+	def action_simulasi(self,values):
+		for rec in self:
+			for product in rec.product_list:
+				line_id = self.env["adhimix.pre.line"].search([('satuan_barang','=',product.satuan_barang.id),('kapasitas_sisa','>',0)])
+				if line_id.kapasitas_sisa >= product.qty:
+					qty = product.qty
+				elif line_id.kapasitas_sisa < product.qty:
+					qty = line_id.kapasitas_sisa
+
+					self.env["adhimix.pre.rencana.produksi"].create({
+																	'reference': rec.id,
+																	'product_id' : product.product_id.id,
+																	'line_produksi' : line_id.id,
+																	'qty' : product.qty
+																	}).id
 
 
 class adhimix_pre_spp_line(models.Model):
@@ -26,7 +42,7 @@ class adhimix_pre_spp_line(models.Model):
 
 	reference = fields.Many2one(comodel_name="adhimix.pre.spp",string="Reference")
 	product_id = fields.Many2one(comodel_name="product.product",string="Nama Barang", required=True)
-	satuan_barang = fields.Many2one(comodel_name="product.uom", required=True, string="Satuan" )
+	satuan_barang = fields.Many2one(comodel_name="product.uom", required=True, string="Satuan Barang" )
 	qty = fields.Float(string="Qty",required=True)
 
 	@api.onchange('product_id')
