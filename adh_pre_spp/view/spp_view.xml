@@ -9,7 +9,8 @@
 			<field name="arch" type="xml">
 				<form>
 					<header>
-						<button name="action_simulasi" string="Simulasi" type="object" class="oe_highlight"/>
+						<button name="button_simulasi" string="Simulasi" type="object" class="oe_highlight"/>
+						<button name="button_reset" string="Reset" type="object" class="oe_highlight"/>
 					</header>
 					<sheet>
 						<group>
@@ -37,7 +38,7 @@
 												<field name="line_produksi"/>
 												<field name="qty"/>
 												<field name="tanggal_mulai"/>
-												<field name="tanggal_selesai"/>
+												<!-- <field name="tanggal_selesai"/> -->
 												<field name="nomor_mo"/>
 												<field name="qty_done"/>
 												<field name="qty_cancel"/>

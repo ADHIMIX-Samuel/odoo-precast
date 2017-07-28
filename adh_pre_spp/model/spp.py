@@ -1,5 +1,7 @@
 from odoo import api, fields, models, _
 import time
+from datetime import timedelta, date
+import datetime
 
 
 class adhimix_pre_spp(models.Model):
@@ -20,21 +22,33 @@ class adhimix_pre_spp(models.Model):
 		return super(adhimix_pre_spp, self).create(vals)
 
 	@api.multi
-	def action_simulasi(self,values):
+	def button_simulasi(self):
 		for rec in self:
 			for product in rec.product_list:
-				line_id = self.env["adhimix.pre.line"].search([('satuan_barang','=',product.satuan_barang.id),('kapasitas_sisa','>',0)])
-				if line_id.kapasitas_sisa >= product.qty:
-					qty = product.qty
-				elif line_id.kapasitas_sisa < product.qty:
-					qty = line_id.kapasitas_sisa
+				qty_produksi = product.qty
+				line_ids = self.env["adhimix.pre.line"].search([('satuan_barang','=',product.satuan_barang.id)])
+				if line_ids:
+					for line in line_ids:
+						if line.kapasitas_sisa >= qty_produksi:
+							qty = qty_produksi
+							qty_produksi = 0
+						elif line.kapasitas_sisa < qty_produksi and line.kapasitas_sisa > 0:
+							qty = line.kapasitas_sisa
+							qty_produksi = qty_produksi - line.kapasitas_sisa		
 
-					self.env["adhimix.pre.rencana.produksi"].create({
-																	'reference': rec.id,
-																	'product_id' : product.product_id.id,
-																	'line_produksi' : line_id.id,
-																	'qty' : product.qty
-																	}).id
+						self.env["adhimix.pre.rencana.produksi"].create({
+																		'reference': rec.id,
+																		'product_id' : product.product_id.id,
+																		'line_produksi' : line.id,																		
+																		'qty' : qty
+																		}).id
+
+
+	@api.multi
+	def button_reset(self):
+		for rec in self:
+			for x in rec.rencana_produksi:								
+				x.unlink()
 
 
 class adhimix_pre_spp_line(models.Model):
@@ -57,11 +71,11 @@ class adhimix_pre_rencana_produksi(models.Model):
 	product_id = fields.Many2one(comodel_name="product.product",string="Nama Barang")
 	line_produksi = fields.Many2one(comodel_name="adhimix.pre.line", string="Line Produksi")
 	qty = fields.Float(string="Qty")
-	tanggal_mulai= fields.Date(string="Tanggal Mulai")
-	tanggal_selesai= fields.Date(string="Tanggal Selesai")
+	tanggal_mulai = fields.Date(string="Tanggal Mulai")
+	# tanggal_selesai= fields.Date(string="Tanggal Selesai")
 	nomor_mo = fields.Many2one(comodel_name="mrp.production",string="Nomor MO")
 	qty_done = fields.Float(string="Qty Selesai")
-	qty_cancel= fields.Float(string="Qty Batal")
+	qty_cancel = fields.Float(string="Qty Batal")
 	qty_remaining = fields.Float(string="Qty Sisa")
 	qty_pindah = fields.Float(string="Qty Pindah")
 	qty_pindahan = fields.Float(string="Qty Pindahan")
