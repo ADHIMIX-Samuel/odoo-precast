@@ -41,7 +41,7 @@ class adhimix_pre_line_active(models.Model):
 	reference = fields.Many2one(comodel_name="adhimix.pre.line", required=True, string="Line ID")
 	nomor_mo = fields.Many2one(comodel_name="mrp.production", required=True, string="Nomor MO")
 	qty_produksi = fields.Float(string="Qty Produksi", required=True)
-	tanggal_produksi = fields.Date(string="Tanggal Produksi")
+	tanggal = fields.Date(string="Tanggal")
 	status_produksi = fields.Char(string="Status Produksi", compute="_get_status_produksi")
 
 	@api.depends('status_produksi')
@@ -56,7 +56,7 @@ class adhimix_pre_line_done(models.Model):
 	reference = fields.Many2one(comodel_name="adhimix.pre.line", required=True, string="Line ID")
 	nomor_mo = fields.Many2one(comodel_name="mrp.production", required=True, string="Nomor MO")
 	qty_produksi = fields.Float(string="Qty Produksi", required=True)
-	tanggal_produksi = fields.Date(string="Tanggal Produksi")
+	tanggal = fields.Date(string="Tanggal")
 	status_produksi = fields.Char(string="Status Produksi", compute="_get_status_produksi")
 
 	@api.depends('status_produksi')
@@ -81,7 +81,7 @@ class mrp_production(models.Model):
 															'reference': production.line_produksi.id,
 															'nomor_mo' : production.id,
 															'qty_produksi' : production.product_qty,
-															'tanggal_produksi' : production.date_planned_start,
+															'tanggal' : production.date_planned_start,
 															'status_produksi' : production.state
 															}).id
 			else :
@@ -99,7 +99,7 @@ class mrp_production(models.Model):
 													'reference': production.line_produksi.id,
 													'nomor_mo' : production.id,
 													'qty_produksi' : production.product_qty,
-													'tanggal_produksi' : production.date_planned_start,
+													'tanggal' : production.date_planned_start,
 													'status_produksi' : production.state
 													}).id
 

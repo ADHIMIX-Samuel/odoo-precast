@@ -29,7 +29,7 @@
 											<tree string="Line Produksi" editable="top">
 												<field name="nomor_mo"/>
 												<field name="qty_produksi"/>
-												<field name="tanggal_produksi"/>
+												<field name="tanggal"/>
 												<field name="status_produksi"/>
 											</tree>
 										</field>
@@ -41,7 +41,7 @@
 											<tree string="Line Produksi" editable="top">
 												<field name="nomor_mo"/>
 												<field name="qty_produksi"/>
-												<field name="tanggal_produksi"/>
+												<field name="tanggal"/>
 												<field name="status_produksi"/>
 											</tree>
 										</field>
@@ -64,6 +64,8 @@
 					<field name="name"/>
 					<field name="satuan_barang"/>
 					<field name="kapasitas_line"/>
+					<field name="kapasitas_terisi"/>
+					<field name="kapasitas_sisa"/>
 					<field name="dibuat_oleh"/>
 				</tree>
 			</field>
