@@ -15,6 +15,7 @@
 		"menu.xml",
 		"data/ir_sequence.xml",
 		"view/line_view.xml",
+		"report/line_report.xml",
 	],
 	"installable": True,
 	"auto_install": False,

@@ -1,0 +1,115 @@
+<odoo>
+	<data>
+		<report
+			id="report_line_menu"
+			string="Line Produksi"
+			model="adhimix.pre.line"
+			report_type="qweb-pdf"
+			file="adhimix.pre.line"
+			name="adh_pre_line.line_report"
+		/>
+
+		<template id="line_report">
+			<t t-call="report.html_container">
+				<t t-foreach="docs" t-as="doc">
+					<t t-call="adh_pre_line.line_report_document"/>
+				</t>
+			</t>
+		</template>
+
+		<template id="line_report_document">
+			<t t-call="report.external_layout">
+				<!-- <t t-set="doc" t-value="doc.with_context(
+					{'lang':doc.satuan_barang.lang})" /> -->
+
+				<div class="page">
+					<div class="oe_structure"/>
+
+					<h2>
+						LINE PRODUKSI : <span t-field="doc.name"/>
+					</h2>
+
+					<table class="table table-condensed">
+						<div class="row">
+							<div class="col-xs-3">Satuan Barang</div>
+							<div class="col-xs-3"><span t-field="doc.satuan_barang"/></div>
+							<div class="col-xs-3">Kapasitas Line</div>
+							<div class="col-xs-3"><span t-field="doc.kapasitas_line"/></div>
+						</div>
+						<div class="row">
+							<div class="col-xs-3">Kapasitas Terisi</div>
+							<div class="col-xs-3"><span t-field="doc.kapasitas_terisi"/></div>
+							<div class="col-xs-3">Kapasitas Sisa</div>
+							<div class="col-xs-3"><span t-field="doc.kapasitas_sisa"/></div>
+						</div>
+					</table>
+
+					<table class="table table-condensed">
+						<thead>
+							<tr>
+								<th>No Mo</th>
+								<th>Qty Produksi</th>
+								<th>Tanggal</th>
+								<th>Status Produksi</th>
+							</tr>
+						</thead>
+
+							<tbody>
+								<tr t-foreach="doc.produksi_berjalan" t-as="l">
+									<td>
+										<span t-field="l.nomor_mo"/>
+									</td>
+									<td>
+										<span t-field="l.qty_produksi"/>
+									</td>
+									<td>
+										<span t-field="l.tanggal"/>
+									</td>
+									<td>
+										<span t-field="l.status_produksi"/>
+									</td>
+								</tr>
+							</tbody>
+					</table>
+					<table class="table table-condensed">
+						<thead>
+							<tr>
+								<th>No Mo</th>
+								<th>Qty Produksi</th>
+								<th>Tanggal</th>
+								<th>Status Produksi</th>
+							</tr>
+						</thead>
+
+							<tbody>
+								<tr t-foreach="doc.produksi_selesai" t-as="l">
+									<td>
+										<span t-field="l.nomor_mo"/>
+									</td>
+									<td>
+										<span t-field="l.qty_produksi"/>
+									</td>
+									<td>
+										<span t-field="l.tanggal"/>
+									</td>
+									<td>
+										<span t-field="l.status_produksi"/>
+									</td>
+								</tr>
+							</tbody>
+					</table>
+
+					<table class="table">
+						<tr>
+							<td style="text-align:right">
+								<p style="height:2cm"> Dibuat Oleh </p>
+								<p><span t-field="doc.dibuat_oleh"/></p>
+							</td>
+						</tr>
+					</table>
+					<div class="oe_structure"/>
+				</div>
+			</t>
+		</template>
+	</data>
+</odoo>
