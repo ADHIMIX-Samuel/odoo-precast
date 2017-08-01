@@ -1,0 +1,11 @@
+<odoo>
+	<data>
+		<record id="seq_adhimix_pre_line" model="ir.sequence">  
+          <field name="name">Adhimix Precast Line</field>  
+          <field name="code">adhimix.pre.line</field>  
+          <field name="prefix">LINE-</field>  
+          <field name="padding">4</field>  
+          <field eval="1" name="number_increment"/>  
+        </record>		
+	</data>
+</odoo>
