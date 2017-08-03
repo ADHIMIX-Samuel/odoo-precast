@@ -1,7 +1,6 @@
 from odoo import api, fields, models, _
+from datetime import timedelta, datetime
 import time
-from datetime import timedelta, date
-import datetime
 
 
 class adhimix_pre_spp(models.Model):
@@ -42,12 +41,26 @@ class adhimix_pre_spp(models.Model):
 																		'line_produksi' : line.id,																		
 																		'qty' : qty
 																		}).id
-
+		# cara melooping tanggal rencana_produksi
+		# 	x = 0
+		# 	from_date = datetime.now()
+		# 	for product in rec.product_list:
+		# 		while x < product.qty:                    
+		# 			self.env["adhimix.pre.rencana.produksi"].create({
+		# 															'reference': rec.id,
+		# 															'product_id' : product.product_id.id,
+		# 															'tanggal_mulai':from_date
+		# 															# 'qty' : qty
+		# 															}).id
+		# 			from_date = from_date + timedelta(days = 1)          
+		# 			x = x + 1
+		# return True
+			
 
 	@api.multi
 	def button_reset(self):
 		for rec in self:
-			for x in rec.rencana_produksi:								
+			for x in rec.rencana_produksi:
 				x.unlink()
 
 
@@ -79,7 +92,20 @@ class adhimix_pre_rencana_produksi(models.Model):
 	qty_remaining = fields.Float(string="Qty Sisa")
 	qty_pindah = fields.Float(string="Qty Pindah")
 	qty_pindahan = fields.Float(string="Qty Pindahan")
+	status = fields.Selection([('Menunggu','Menunggu'),('Produksi','Produksi')], string="Status", default="Menunggu")
 
+	@api.multi
+	def button_produksi(self):
+		self.status = 'Produksi'
+		for rec in self:
+			self.env["mrp.production"].create({
+												'product_id' : rec.product_id.id,
+												'product_qty' : rec.qty,
+												'line_produksi' : rec.line_produksi.id,
+												'tanggal_mo' : rec.tanggal_mulai,
+												'nomor_spp' : rec.reference.id,
+												'product_uom_id' : rec.product_id.uom_id.id
+												}).id
 
 class adhimix_pre_rencana_pengiriman(models.Model):
 	_name = 'adhimix.pre.rencana.pengiriman'
@@ -122,3 +148,10 @@ class adhimix_pre_rencana_install(models.Model):
 	qty_cancel = fields.Float(string="Qty Batal")
 	qty_repair = fields.Float(string="Repair")
 	qty_reject = fields.Float(string="Reject")
+
+
+class mrp_production(models.Model):
+	_inherit = 'mrp.production'
+
+	nomor_spp = fields.Many2one(comodel_name="adhimix.pre.spp", string="Nomor SPP")
+	tanggal_mo = fields.Date(string="Tanggal")

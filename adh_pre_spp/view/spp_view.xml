@@ -35,6 +35,7 @@
 										<field name="rencana_produksi" nolabel="1">
 											<tree editable="top">
 												<field name="product_id"/>
+												<button name="button_produksi" type="object" string="Produksi" icon="fa-arrow-right" class="oe_highlight" attrs="{'invisible':[('status','=','Produksi')]}"/>
 												<field name="line_produksi"/>
 												<field name="qty"/>
 												<field name="tanggal_mulai"/>
@@ -45,6 +46,7 @@
 												<field name="qty_remaining"/>
 												<field name="qty_pindah"/>
 												<field name="qty_pindahan"/>
+												<field name="status"/>
 											</tree>
 										</field>
 									</group>
@@ -117,6 +119,23 @@
 				</tree>
 			</field>
 		</record>
+
+		<!-- Inherit mrp.production -->
+		<record id="view_adhimix_mrp_production" model="ir.ui.view">
+	    	<field name="name">adhimix.mrp.production</field>
+	    	<field name="model">mrp.production</field>
+	    	<field name="type">form</field>
+	    	<field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+	    	<field name="priority" eval="8"/>
+	    	<field name="arch" type="xml">
+	        	<field name="origin" position="after">
+	          		<field name="nomor_spp"/>
+	        	</field>
+	        	<field name="date_planned_start" position="replace">
+	          		<field name="tanggal_mo"/>
+	        	</field>
+	      	</field>
+	    </record>
 
 	</data>
 </odoo>
