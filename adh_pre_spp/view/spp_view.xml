@@ -131,8 +131,25 @@
 	        	<field name="origin" position="after">
 	          		<field name="nomor_spp"/>
 	        	</field>
-	        	<field name="date_planned_start" position="replace">
-	          		<field name="tanggal_mo"/>
+	        	<field name="date_planned_start" position="attributes">
+	          		<attribute name="string">Tanggal Produksi</attribute>
+	        	</field>
+	      	</field>
+	    </record>
+
+	    <record id="view_adhimix_mrp_production_tree" model="ir.ui.view">
+	    	<field name="name">adhimix.mrp.production.tree</field>
+	    	<field name="model">mrp.production</field>
+	    	<field name="type">tree</field>
+	    	<field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
+	    	<field name="priority" eval="8"/>
+	    	<field name="arch" type="xml">
+	        	<field name="name" position="after">
+	          		<field name="nomor_spp"/>
+	          		<field name="line_produksi"/>
+	        	</field>
+	        	<field name="date_planned_start" position="attributes">
+	          		<attribute name="string">Tanggal Produksi</attribute>
 	        	</field>
 	      	</field>
 	    </record>

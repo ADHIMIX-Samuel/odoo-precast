@@ -86,7 +86,7 @@ class adhimix_pre_rencana_produksi(models.Model):
 	qty = fields.Float(string="Qty")
 	tanggal_mulai = fields.Date(string="Tanggal Mulai")
 	# tanggal_selesai= fields.Date(string="Tanggal Selesai")
-	nomor_mo = fields.Many2one(comodel_name="mrp.production",string="Nomor MO")
+	nomor_mo = fields.Many2one(comodel_name="mrp.production",string="Nomor MO",)
 	qty_done = fields.Float(string="Qty Selesai")
 	qty_cancel = fields.Float(string="Qty Batal")
 	qty_remaining = fields.Float(string="Qty Sisa")
@@ -98,14 +98,17 @@ class adhimix_pre_rencana_produksi(models.Model):
 	def button_produksi(self):
 		self.status = 'Produksi'
 		for rec in self:
-			self.env["mrp.production"].create({
+			mo_id = self.env["mrp.production"].create({
 												'product_id' : rec.product_id.id,
 												'product_qty' : rec.qty,
 												'line_produksi' : rec.line_produksi.id,
-												'tanggal_mo' : rec.tanggal_mulai,
+												'date_Planned_start' : rec.tanggal_mulai,
 												'nomor_spp' : rec.reference.id,
-												'product_uom_id' : rec.product_id.uom_id.id
+												'product_uom_id' : rec.product_id.uom_id.id,
+												'bom_id' : rec.product_id.id
 												}).id
+			self.nomor_mo = mo_id
+
 
 class adhimix_pre_rencana_pengiriman(models.Model):
 	_name = 'adhimix.pre.rencana.pengiriman'
@@ -154,4 +157,3 @@ class mrp_production(models.Model):
 	_inherit = 'mrp.production'
 
 	nomor_spp = fields.Many2one(comodel_name="adhimix.pre.spp", string="Nomor SPP")
-	tanggal_mo = fields.Date(string="Tanggal")
